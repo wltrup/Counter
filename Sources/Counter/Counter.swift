@@ -11,8 +11,8 @@ public struct Counter<CountType: FixedWidthInteger, StepType: UnsignedInteger & 
     public let minCount: CountType
     public let maxCount: CountType
 
-    public var count: CountType = .zero
-    public var isEnabled: Bool = true
+    public internal(set) var count: CountType
+    public var isEnabled: Bool
 
     public init(
         step: StepType = 1, // max(1, step)
