@@ -8,24 +8,24 @@ public enum CountingAction: String, Hashable, CaseIterable, Codable {
 public struct Counter<CountType: FixedWidthInteger, StepType: UnsignedInteger & FixedWidthInteger> {
 
     public let step: StepType
-    public let minCount: CountType?
-    public let maxCount: CountType?
+    public let minCount: CountType
+    public let maxCount: CountType
 
     public var count: CountType = .zero
     public var isEnabled: Bool = true
 
     public init(
-        step: StepType,
-        minCount: CountType?,
-        maxCount: CountType?,
-        count: CountType,
-        isEnabled: Bool
+        step: StepType = 1, // max(1, step)
+        minCount: CountType = .zero,
+        maxCount: CountType = .max,
+        count: CountType = 0, // clamped to the range [minCount, maxCount]
+        isEnabled: Bool = true
     ) {
         self.step = max(1, step)
         self.minCount = minCount
         self.maxCount = maxCount
+        self.count = min(max(minCount, count), maxCount)
         self.isEnabled = isEnabled
-        self.count = min(max(safeMinCount, count), safeMaxCount)
     }
 
     /// Increments the counter by its `step` value, if incrementing is enabled.
@@ -45,23 +45,13 @@ public struct Counter<CountType: FixedWidthInteger, StepType: UnsignedInteger & 
     /// Incrementing is enabled when the counter itself is enabled **and** incrementing
     /// the counter's current value will not go above its maximum value.
     public var isIncrementingEnabled: Bool {
-        isEnabled && (count + CountType(step) <= safeMaxCount)
+        isEnabled && (count <= maxCount - CountType(step))
     }
 
     /// Decrementing is enabled when the counter itself is enabled **and** decrementing
     /// the counter's current value will not go below its minimum value.
     public var isDecrementingEnabled: Bool {
-        isEnabled && (count >= safeMinCount + CountType(step))
-    }
-
-    /// Defaults to `.min`.
-    public var safeMinCount: CountType {
-        minCount ?? .min
-    }
-
-    /// Defaults to `.max`.
-    public var safeMaxCount: CountType {
-        maxCount ?? .max
+        isEnabled && (count >= minCount + CountType(step))
     }
 
 }

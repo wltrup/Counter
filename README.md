@@ -17,18 +17,18 @@ public enum CountingAction: String, Hashable, CaseIterable, Codable {
 public struct Counter<CountType: FixedWidthInteger, StepType: UnsignedInteger & FixedWidthInteger> {
 
     public let step: StepType
-    public let minCount: CountType?
-    public let maxCount: CountType?
+    public let minCount: CountType
+    public let maxCount: CountType
 
     public var count: CountType = .zero
     public var isEnabled: Bool = true
 
     public init(
-        step: StepType,
-        minCount: CountType?,
-        maxCount: CountType?,
-        count: CountType,
-        isEnabled: Bool
+        step: StepType = 1, // max(1, step)
+        minCount: CountType = .zero,
+        maxCount: CountType = .max,
+        count: CountType = 0, // clamped to the range [minCount, maxCount]
+        isEnabled: Bool = true
     )
 
     /// Increments the counter by its `step` value, if incrementing is enabled.
@@ -47,18 +47,14 @@ public struct Counter<CountType: FixedWidthInteger, StepType: UnsignedInteger & 
     /// the counter's current value will not go below its minimum value.
     public var isDecrementingEnabled: Bool
 
-    /// Defaults to `.min`.
-    public var safeMinCount: CountType
-
-    /// Defaults to `.max`.
-    public var safeMaxCount: CountType
-
 }
 
 extension Counter: Equatable where CountType: Equatable, StepType: Equatable {}
 extension Counter: Hashable where CountType: Hashable, StepType: Hashable {}
 extension Counter: Codable where CountType: Codable, StepType: Codable {}
 ```
+
+Note that `minCount` need not be `.zero`. It can be as low as `.min`.
 
 ## Installation
 
