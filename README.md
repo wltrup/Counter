@@ -27,7 +27,7 @@ public struct Counter<CountType: FixedWidthInteger, StepType: UnsignedInteger & 
         step: StepType = 1, // max(1, step)
         minCount: CountType = .zero,
         maxCount: CountType = .max,
-        count: CountType = 0, // clamped to the range [minCount, maxCount]
+        count: CountType = .zero, // clamped to the range [minCount, maxCount]
         isEnabled: Bool = true
     )
 
