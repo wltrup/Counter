@@ -8,6 +8,7 @@
 ## What
 
 **Counter** is a Swift Package Manager package for iOS/tvOS (10.0 and above), watchOS (4.0 and above), and macOS (10.14 and above), under Swift 5.0 and above,  defining a model type to represent an integer counter:
+
 ```swift
 public enum CountingAction: String, Hashable, CaseIterable, Codable {
     case increment
@@ -59,10 +60,6 @@ Note that `minCount` need not be `.zero`. It can be as low as `.min`.
 ## Installation
 
 **Counter** is provided only as a Swift Package Manager package, because I'm moving away from CocoaPods and Carthage, and can be easily installed directly from Xcode.
-
-## Author
-
-Wagner Truppel, trupwl@gmail.com
 
 ## License
 
